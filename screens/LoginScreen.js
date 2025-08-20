@@ -15,10 +15,7 @@ export default function LoginScreen({ navigation }) {
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
 
-  const validateMobile = (num) => {
-    const regex = /^[0-9]{10}$/;
-    return regex.test(num);
-  };
+  const validateMobile = (num) => /^[0-9]{10}$/.test(num);
 
   const onLogin = () => {
     if (!mobile.trim() || !password.trim()) {
@@ -31,7 +28,6 @@ export default function LoginScreen({ navigation }) {
       return;
     }
 
-    // Demo login logic
     if (mobile === "9999999999") {
       navigation.replace("CustomerHome", { user: mobile });
     } else if (mobile === "8888888888") {
@@ -42,7 +38,7 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <LinearGradient colors={["#2563eb", "#1e3a8a"]} style={{ flex: 1 }}>
+    <LinearGradient colors={["#f9fafb", "#e0f7fa"]} style={{ flex: 1 }}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
@@ -56,7 +52,7 @@ export default function LoginScreen({ navigation }) {
           <Text style={styles.label}>Mobile Number</Text>
           <TextInput
             value={mobile}
-            onChangeText={(text) => setMobile(text.replace(/[^0-9]/g, ""))} // only digits
+            onChangeText={(text) => setMobile(text.replace(/[^0-9]/g, ""))}
             placeholder="Enter 10-digit mobile number"
             keyboardType="numeric"
             maxLength={10}
@@ -89,41 +85,32 @@ export default function LoginScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 24,
-  },
+  container: { flex: 1, justifyContent: "center", padding: 24 },
   appTitle: {
-    fontSize: 42,
+    fontSize: 40,
     fontWeight: "900",
     textAlign: "center",
-    color: "white",
-    letterSpacing: 2,
+    color: "#111827",
+    letterSpacing: 1.5,
     marginBottom: 6,
   },
   subTitle: {
     fontSize: 16,
     textAlign: "center",
-    color: "#e0e7ff",
+    color: "#374151",
     marginBottom: 28,
   },
   card: {
     backgroundColor: "white",
-    borderRadius: 24,
+    borderRadius: 20,
     padding: 24,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 6,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 4,
   },
-  label: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#111827",
-    marginBottom: 6,
-  },
+  label: { fontSize: 14, fontWeight: "600", color: "#374151", marginBottom: 6 },
   input: {
     borderWidth: 1,
     borderColor: "#d1d5db",
@@ -135,19 +122,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#f9fafb",
   },
   primaryBtn: {
-    backgroundColor: "#2563eb",
+    backgroundColor: "#34d399",
     paddingVertical: 16,
     borderRadius: 14,
     alignItems: "center",
     marginTop: 4,
   },
-  primaryBtnText: {
-    color: "white",
-    fontWeight: "700",
-    fontSize: 16,
-    letterSpacing: 1,
-  },
+  primaryBtnText: { color: "white", fontWeight: "700", fontSize: 16, letterSpacing: 1 },
   footerRow: { flexDirection: "row", justifyContent: "center", marginTop: 18 },
   footerText: { color: "#374151", fontSize: 14 },
-  link: { color: "#2563eb", fontWeight: "700", fontSize: 14 },
+  link: { color: "#60a5fa", fontWeight: "700", fontSize: 14 },
 });
