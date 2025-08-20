@@ -43,7 +43,7 @@ export default function WorkerDetails({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Worker Details</Text>
+      <Text style={styles.title}>WorkerDetails</Text>
 
       <TextInput
         style={styles.input}
