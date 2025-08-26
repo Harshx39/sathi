@@ -25,7 +25,7 @@ export default function WorkerHome({ route, navigation }) {
   const actions = [
     { id: "1", title: "My Jobs", icon: "briefcase", color: "#3b82f6", screen: "WorkerJobs" },
     { id: "2", title: "Withdraw", icon: "wallet", color: "#22c55e", screen: "WorkerWithdraw" },
-    { id: "3", title: "Profile", icon: "user", color: "#f59e0b", screen: "WorkerProfile" },
+    { id: "3", title: "Profile", icon: "user", color: "#f59e0b", screen: "Profile" },
     { id: "4", title: "Support", icon: "headset", color: "#06b6d4", screen: "WorkerSupport" },
   ];
 
@@ -37,17 +37,17 @@ export default function WorkerHome({ route, navigation }) {
 
   return (
     <LinearGradient colors={["#fdfcfb", "#e2d1c3"]} style={{ flex: 1 }}>
-      {/* ✅ Navbar */}
+      {/* Navbar */}
       <View style={styles.navbar}>
         <Text style={styles.brand}>
-          <FontAwesome5 name="qrcode" size={18} color="#f59e0b" /> Sathi
+          <FontAwesome5 name="briefcase" size={18} color="#f59e0b" /> Sathi Worker
         </Text>
         <TouchableOpacity onPress={() => setMenuVisible(!menuVisible)}>
           <Ionicons name="person-circle" size={32} color="#333" />
         </TouchableOpacity>
       </View>
 
-      {/* ✅ Dropdown Menu */}
+      {/* Dropdown Menu */}
       {menuVisible && (
         <View style={styles.dropdown}>
           <TouchableOpacity
@@ -74,13 +74,18 @@ export default function WorkerHome({ route, navigation }) {
         </View>
       )}
 
-      {/* ✅ Body */}
+      {/* Main Body */}
       <FlatList
         ListHeaderComponent={
-          <View style={styles.container}>
-            {/* Header */}
-            <Text style={styles.title}>Welcome Worker 👷</Text>
-            <Text style={styles.sub}>Logged in as: {user}</Text>
+          <>
+            {/* Welcome */}
+            <View style={styles.welcomeCard}>
+              <FontAwesome5 name="hand-paper" size={32} color="#f59e0b" />
+              <View style={{ marginLeft: 12 }}>
+                <Text style={styles.welcomeTitle}>Welcome {user} 👷</Text>
+                <Text style={styles.welcomeSubtitle}>Manage your jobs & earnings</Text>
+              </View>
+            </View>
 
             {/* Stats */}
             <View style={styles.statsGrid}>
@@ -133,11 +138,11 @@ export default function WorkerHome({ route, navigation }) {
                 </View>
               ))}
             </View>
-          </View>
+          </>
         }
       />
 
-      {/* ✅ Bottom Nav */}
+      {/* Bottom Nav */}
       <View style={styles.bottomNav}>
         <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate("WorkerJobs")}>
           <Ionicons name="time" size={22} color="#666" />
@@ -153,22 +158,26 @@ export default function WorkerHome({ route, navigation }) {
         </TouchableOpacity>
       </View>
 
-      {/* ✅ Logout Modal */}
+      {/* Logout Modal */}
       <Modal visible={logoutVisible} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.modalBox}>
+            <Text style={styles.modalTitle}>
+              <FontAwesome5 name="sign-out-alt" size={18} color="#f59e0b" /> Confirm Logout
+            </Text>
             <Text style={styles.modalText}>Are you sure you want to logout?</Text>
             <View style={styles.modalActions}>
-              <TouchableOpacity onPress={() => setLogoutVisible(false)}>
-                <Text style={styles.cancelBtn}>Cancel</Text>
+              <TouchableOpacity style={styles.btnCancel} onPress={() => setLogoutVisible(false)}>
+                <Text style={{ color: "#333" }}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
+                style={styles.btnLogout}
                 onPress={() => {
                   setLogoutVisible(false);
-                  navigation.replace("Login"); // Back to Login
+                  navigation.replace("Login");
                 }}
               >
-                <Text style={styles.logoutBtn}>Logout</Text>
+                <Text style={{ color: "#fff" }}>Yes, Logout</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -179,66 +188,56 @@ export default function WorkerHome({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 12, paddingBottom: 60 },
+  container: { flex: 1, backgroundColor: "#f9f9f9" },
 
-  // ✅ Navbar
+  // Navbar
   navbar: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 15,
-    paddingVertical: 12,
+    padding: 15,
     backgroundColor: "#fff",
-    borderBottomWidth: 1,
-    borderColor: "#eee",
+    elevation: 3,
+    zIndex: 1000,
   },
-  brand: { fontSize: 18, fontWeight: "bold", color: "#111" },
+  brand: { fontSize: 18, fontWeight: "bold", color: "#333" },
 
+  // Dropdown
   dropdown: {
     position: "absolute",
-    right: 10,
     top: 55,
+    right: 10,
     backgroundColor: "#fff",
+    padding: 10,
     borderRadius: 8,
-    elevation: 4,
-    padding: 8,
-    zIndex: 10,
-  },
-  dropdownItem: { flexDirection: "row", alignItems: "center", padding: 8 },
-  dropdownText: { marginLeft: 6, fontSize: 14 },
-  divider: { height: 1, backgroundColor: "#eee", marginVertical: 4 },
-
-  // Logout Modal
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalBox: {
-    width: "80%",
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 10,
     elevation: 5,
+    zIndex: 9999,
   },
-  modalText: { fontSize: 16, marginBottom: 20, textAlign: "center" },
-  modalActions: { flexDirection: "row", justifyContent: "space-around" },
-  cancelBtn: { color: "#666", fontSize: 15 },
-  logoutBtn: { color: "#e11d48", fontSize: 15, fontWeight: "bold" },
+  dropdownItem: { flexDirection: "row", alignItems: "center", padding: 6 },
+  dropdownText: { marginLeft: 6, fontSize: 16, color: "#333" },
+  divider: { height: 1, backgroundColor: "#ddd", marginVertical: 5 },
 
-  // Header
-  title: { fontSize: 22, fontWeight: "700", color: "#111", textAlign: "center", marginTop: 20 },
-  sub: { fontSize: 15, color: "#555", textAlign: "center", marginBottom: 20 },
+  // Welcome
+  welcomeCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    padding: 15,
+    margin: 12,
+    borderRadius: 10,
+    elevation: 2,
+  },
+  welcomeTitle: { fontSize: 16, fontWeight: "600" },
+  welcomeSubtitle: { fontSize: 13, color: "#666" },
 
   // Stats
-  statsGrid: { flexDirection: "row", flexWrap: "wrap", marginTop: 10 },
+  statsGrid: { flexDirection: "row", flexWrap: "wrap", marginHorizontal: 10 },
   statCard: {
     width: "45%",
     backgroundColor: "#fff",
     margin: 8,
     padding: 15,
-    borderRadius: 12,
+    borderRadius: 10,
     elevation: 2,
     alignItems: "center",
   },
@@ -248,39 +247,39 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 6,
+    marginBottom: 8,
   },
   statNumber: { fontSize: 18, fontWeight: "bold" },
   statLabel: { fontSize: 12, color: "#555", textAlign: "center" },
 
   // Actions
-  sectionTitle: { marginLeft: 8, marginTop: 14, fontSize: 14, fontWeight: "600", color: "#444" },
-  actionsGrid: { flexDirection: "row", flexWrap: "wrap", margin: 8 },
+  sectionTitle: { marginLeft: 15, marginTop: 10, fontSize: 14, fontWeight: "bold", color: "#666" },
+  actionsGrid: { flexDirection: "row", flexWrap: "wrap", margin: 10 },
   actionCard: {
     width: "45%",
     backgroundColor: "#fff",
     margin: 8,
-    padding: 14,
-    borderRadius: 12,
+    padding: 15,
+    borderRadius: 10,
     elevation: 2,
     alignItems: "center",
   },
   actionIcon: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 6,
   },
-  actionTitle: { fontSize: 13, fontWeight: "500" },
+  actionTitle: { fontSize: 13, fontWeight: "500", textAlign: "center" },
 
   // Recent Activity
-  card: { backgroundColor: "#fff", margin: 10, borderRadius: 10, elevation: 2, padding: 12 },
-  cardHeader: { flexDirection: "row", justifyContent: "space-between", marginBottom: 8 },
+  card: { backgroundColor: "#fff", margin: 12, borderRadius: 10, elevation: 2, padding: 10 },
+  cardHeader: { flexDirection: "row", justifyContent: "space-between", marginBottom: 10 },
   cardTitle: { fontSize: 14, fontWeight: "600" },
   link: { fontSize: 12, color: "#3b82f6" },
-  activityItem: { flexDirection: "row", marginBottom: 10 },
+  activityItem: { flexDirection: "row", marginBottom: 12 },
   activityIcon: {
     width: 28,
     height: 28,
@@ -302,4 +301,18 @@ const styles = StyleSheet.create({
     borderColor: "#eee",
   },
   navItem: { alignItems: "center" },
+
+  // Modal
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalBox: { backgroundColor: "#fff", padding: 20, borderRadius: 10, width: "80%" },
+  modalTitle: { fontSize: 16, fontWeight: "bold", marginBottom: 10 },
+  modalText: { fontSize: 14, color: "#555", marginBottom: 15 },
+  modalActions: { flexDirection: "row", justifyContent: "flex-end" },
+  btnCancel: { marginRight: 10, padding: 8 },
+  btnLogout: { backgroundColor: "#f59e0b", padding: 8, borderRadius: 6 },
 });

@@ -11,7 +11,7 @@ import {
   Image,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 export default function LoginScreen({ navigation }) {
   const [mobile, setMobile] = useState("");
@@ -47,7 +47,7 @@ export default function LoginScreen({ navigation }) {
       >
         {/* Brand */}
         <View style={styles.brand}>
-          <Ionicons name="qr-code" size={50} color="#10b981" />
+           <FontAwesome5 name="handshake" size={50} color="#10b981" /> 
           <Text style={styles.appTitle}>Sathi</Text>
           <Text style={styles.subTitle}>Your trusted service companion</Text>
         </View>

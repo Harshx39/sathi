@@ -15,6 +15,7 @@ import BookService from './screens/customer/BookService';
 import BookingHistory from './screens/customer/BookingHistory';
 import CustomerProfile from './screens/customer/CustomerProfile';
 import SettingScreen from './screens/SettingScreen';
+import Profile from './screens/Profile';
 
 const Stack = createStackNavigator();
 
@@ -35,6 +36,7 @@ export default function App() {
         <Stack.Screen name="BookingHistory" component={BookingHistory} />
         <Stack.Screen name="CustomerProfile" component={CustomerProfile} />
         <Stack.Screen name="Settings" component={SettingScreen} />
+        <Stack.Screen name="Profile" component={Profile} />
       </Stack.Navigator>
     </NavigationContainer>
   );

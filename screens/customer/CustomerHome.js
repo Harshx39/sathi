@@ -13,6 +13,7 @@ import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 export default function CustomerHome({ route, navigation }) {
   const [menuVisible, setMenuVisible] = useState(false);
   const [logoutVisible, setLogoutVisible] = useState(false);
+  const user = route?.params?.user || "Customer";
 
   const stats = [
     { id: "1", label: "Active Bookings", value: "2", icon: "clipboard-list", color: "#3b82f6" },
@@ -21,8 +22,9 @@ export default function CustomerHome({ route, navigation }) {
 
   const actions = [
     { id: "1", title: "Book Service", icon: "hammer", color: "#3b82f6", screen: "BookService" },
-    { id: "2", title: "Booking History", icon: "time", color: "#f59e0b", screen: "BookingHistory" },
+    { id: "2", title: "Booking History", icon: "history", color: "#f59e0b", screen: "BookingHistory" },
     { id: "3", title: "Profile", icon: "user", color: "#06b6d4", screen: "CustomerProfile" },
+    { id: "4", title: "Support", icon: "headset", color: "#e11d48", screen: "CustomerSupport" },
   ];
 
   const activities = [
@@ -33,17 +35,17 @@ export default function CustomerHome({ route, navigation }) {
 
   return (
     <LinearGradient colors={["#fdfcfb", "#dfe9f3"]} style={{ flex: 1 }}>
-      {/* ✅ Navbar */}
+      {/* Navbar */}
       <View style={styles.navbar}>
         <Text style={styles.brand}>
-         <FontAwesome5 name="qrcode" size={18} color="#f59e0b" /> Sathi
+          <FontAwesome5 name="handshake" size={18} color="#f59e0b" /> Sathi
         </Text>
         <TouchableOpacity onPress={() => setMenuVisible(!menuVisible)}>
           <Ionicons name="person-circle" size={32} color="#333" />
         </TouchableOpacity>
       </View>
 
-      {/* ✅ Dropdown Menu */}
+      {/* Dropdown Menu */}
       {menuVisible && (
         <View style={styles.dropdown}>
           <TouchableOpacity
@@ -70,12 +72,13 @@ export default function CustomerHome({ route, navigation }) {
         </View>
       )}
 
+      {/* Body with FlatList */}
       <FlatList
         ListHeaderComponent={
           <View style={styles.container}>
-            {/* Header */}
-            <Text style={styles.title}>Welcome Customer 🙋</Text>
-            <Text style={styles.sub}>Logged in as: {route?.params?.user}</Text>
+            {/* Welcome */}
+            <Text style={styles.title}>Welcome {user} 🙋</Text>
+            <Text style={styles.sub}>Manage your bookings & services</Text>
 
             {/* Stats */}
             <View style={styles.statsGrid}>
@@ -132,7 +135,7 @@ export default function CustomerHome({ route, navigation }) {
         }
       />
 
-      {/* Bottom Navigation */}
+      {/* Bottom Nav */}
       <View style={styles.bottomNav}>
         <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate("CustomerProfile")}>
           <Ionicons name="person" size={22} color="#666" />
@@ -148,10 +151,11 @@ export default function CustomerHome({ route, navigation }) {
         </TouchableOpacity>
       </View>
 
-      {/* ✅ Logout Modal */}
+      {/* Logout Modal */}
       <Modal visible={logoutVisible} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.modalBox}>
+            <Text style={styles.modalTitle}>Confirm Logout</Text>
             <Text style={styles.modalText}>Are you sure you want to logout?</Text>
             <View style={styles.modalActions}>
               <TouchableOpacity onPress={() => setLogoutVisible(false)}>
@@ -160,7 +164,7 @@ export default function CustomerHome({ route, navigation }) {
               <TouchableOpacity
                 onPress={() => {
                   setLogoutVisible(false);
-                  navigation.replace("Login"); // navigate to login screen
+                  navigation.replace("Login");
                 }}
               >
                 <Text style={styles.logoutBtn}>Logout</Text>
@@ -176,19 +180,19 @@ export default function CustomerHome({ route, navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1, paddingBottom: 60 },
 
-  // ✅ Navbar
+  // Navbar
   navbar: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 15,
-    paddingVertical: 12,
+    padding: 15,
     backgroundColor: "#fff",
     borderBottomWidth: 1,
     borderColor: "#eee",
   },
   brand: { fontSize: 18, fontWeight: "bold", color: "#111" },
 
+  // Dropdown
   dropdown: {
     position: "absolute",
     right: 10,
@@ -203,28 +207,11 @@ const styles = StyleSheet.create({
   dropdownText: { marginLeft: 6, fontSize: 14 },
   divider: { height: 1, backgroundColor: "#eee", marginVertical: 4 },
 
-  // Logout Modal
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalBox: {
-    width: "80%",
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 10,
-    elevation: 5,
-  },
-  modalText: { fontSize: 16, marginBottom: 20, textAlign: "center" },
-  modalActions: { flexDirection: "row", justifyContent: "space-around" },
-  cancelBtn: { color: "#666", fontSize: 15 },
-  logoutBtn: { color: "#e11d48", fontSize: 15, fontWeight: "bold" },
+  // Welcome
+  title: { fontSize: 20, fontWeight: "700", textAlign: "center", marginTop: 20 },
+  sub: { fontSize: 14, color: "#555", textAlign: "center", marginBottom: 20 },
 
   // Stats
-  title: { fontSize: 22, fontWeight: "700", color: "#111", textAlign: "center", marginTop: 20 },
-  sub: { fontSize: 15, marginBottom: 20, color: "#555", textAlign: "center" },
   statsGrid: { flexDirection: "row", flexWrap: "wrap", marginHorizontal: 10 },
   statCard: {
     width: "45%",
@@ -244,7 +231,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   statNumber: { fontSize: 18, fontWeight: "bold" },
-  statLabel: { fontSize: 12, color: "#555", textAlign: "center" },
+  statLabel: { fontSize: 12, color: "#555" },
 
   // Actions
   sectionTitle: { marginLeft: 15, marginTop: 10, fontSize: 14, fontWeight: "bold", color: "#666" },
@@ -295,4 +282,18 @@ const styles = StyleSheet.create({
     borderColor: "#eee",
   },
   navItem: { alignItems: "center" },
+
+  // Modal
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalBox: { backgroundColor: "#fff", padding: 20, borderRadius: 10, width: "80%" },
+  modalTitle: { fontSize: 16, fontWeight: "bold", marginBottom: 10 },
+  modalText: { fontSize: 14, color: "#555", marginBottom: 15, textAlign: "center" },
+  modalActions: { flexDirection: "row", justifyContent: "space-between" },
+  cancelBtn: { color: "#666", fontSize: 15 },
+  logoutBtn: { color: "#e11d48", fontSize: 15, fontWeight: "bold" },
 });
