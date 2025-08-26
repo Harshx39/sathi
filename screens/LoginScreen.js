@@ -8,8 +8,10 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  Image,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function LoginScreen({ navigation }) {
   const [mobile, setMobile] = useState("");
@@ -43,21 +45,33 @@ export default function LoginScreen({ navigation }) {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
       >
-        {/* App Title */}
-        <Text style={styles.appTitle}>Sathi</Text>
-        <Text style={styles.subTitle}>Your trusted service companion</Text>
+        {/* Brand */}
+        <View style={styles.brand}>
+          <Ionicons name="qr-code" size={50} color="#10b981" />
+          <Text style={styles.appTitle}>Sathi</Text>
+          <Text style={styles.subTitle}>Your trusted service companion</Text>
+        </View>
 
         {/* Login Card */}
         <View style={styles.card}>
           <Text style={styles.label}>Mobile Number</Text>
-          <TextInput
-            value={mobile}
-            onChangeText={(text) => setMobile(text.replace(/[^0-9]/g, ""))}
-            placeholder="Enter 10-digit mobile number"
-            keyboardType="numeric"
-            maxLength={10}
-            style={styles.input}
-          />
+          <View style={styles.phoneRow}>
+            <View style={styles.countryCode}>
+              <Image
+                source={{ uri: "https://flagcdn.com/w20/in.png" }}
+                style={styles.flag}
+              />
+              <Text style={styles.code}>+91</Text>
+            </View>
+            <TextInput
+              value={mobile}
+              onChangeText={(text) => setMobile(text.replace(/[^0-9]/g, ""))}
+              placeholder="Enter 10-digit mobile number"
+              keyboardType="numeric"
+              maxLength={10}
+              style={styles.input}
+            />
+          </View>
 
           <Text style={styles.label}>Password</Text>
           <TextInput
@@ -86,19 +100,20 @@ export default function LoginScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "center", padding: 24 },
+  brand: { alignItems: "center", marginBottom: 24 },
   appTitle: {
-    fontSize: 40,
+    fontSize: 36,
     fontWeight: "900",
     textAlign: "center",
     color: "#111827",
-    letterSpacing: 1.5,
-    marginBottom: 6,
+    letterSpacing: 1.2,
+    marginTop: 8,
   },
   subTitle: {
-    fontSize: 16,
+    fontSize: 15,
     textAlign: "center",
     color: "#374151",
-    marginBottom: 28,
+    marginTop: 4,
   },
   card: {
     backgroundColor: "white",
@@ -107,29 +122,48 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.08,
-    shadowRadius: 4,
-    elevation: 4,
+    shadowRadius: 6,
+    elevation: 6,
   },
   label: { fontSize: 14, fontWeight: "600", color: "#374151", marginBottom: 6 },
-  input: {
+  phoneRow: {
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
     borderColor: "#d1d5db",
     borderRadius: 12,
-    paddingHorizontal: 14,
+    overflow: "hidden",
+    marginBottom: 16,
+  },
+  countryCode: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    backgroundColor: "#f3f4f6",
+  },
+  flag: { width: 20, height: 15, marginRight: 6 },
+  code: { fontSize: 15, fontWeight: "600", color: "#333" },
+  input: {
+    flex: 1,
     paddingVertical: 12,
-    marginBottom: 18,
-    fontSize: 16,
+    paddingHorizontal: 14,
+    fontSize: 15,
     backgroundColor: "#f9fafb",
   },
   primaryBtn: {
-    backgroundColor: "#34d399",
+    backgroundColor: "#10b981",
     paddingVertical: 16,
     borderRadius: 14,
     alignItems: "center",
     marginTop: 4,
   },
-  primaryBtnText: { color: "white", fontWeight: "700", fontSize: 16, letterSpacing: 1 },
+  primaryBtnText: {
+    color: "white",
+    fontWeight: "700",
+    fontSize: 16,
+    letterSpacing: 1,
+  },
   footerRow: { flexDirection: "row", justifyContent: "center", marginTop: 18 },
   footerText: { color: "#374151", fontSize: 14 },
-  link: { color: "#60a5fa", fontWeight: "700", fontSize: 14 },
+  link: { color: "#3b82f6", fontWeight: "700", fontSize: 14 },
 });

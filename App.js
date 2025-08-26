@@ -14,6 +14,7 @@ import WorkerProfile from './screens/worker/WorkerProfile';
 import BookService from './screens/customer/BookService';
 import BookingHistory from './screens/customer/BookingHistory';
 import CustomerProfile from './screens/customer/CustomerProfile';
+import SettingScreen from './screens/SettingScreen';
 
 const Stack = createStackNavigator();
 
@@ -21,7 +22,6 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {/* First screen will be Login */}
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="WorkerDetails" component={WorkerDetails} />
@@ -34,6 +34,7 @@ export default function App() {
         <Stack.Screen name="BookService" component={BookService} />
         <Stack.Screen name="BookingHistory" component={BookingHistory} />
         <Stack.Screen name="CustomerProfile" component={CustomerProfile} />
+        <Stack.Screen name="Settings" component={SettingScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

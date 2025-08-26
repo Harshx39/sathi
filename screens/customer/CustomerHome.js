@@ -1,79 +1,298 @@
-              import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  FlatList,
+  Modal,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
 export default function CustomerHome({ route, navigation }) {
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [logoutVisible, setLogoutVisible] = useState(false);
+
+  const stats = [
+    { id: "1", label: "Active Bookings", value: "2", icon: "clipboard-list", color: "#3b82f6" },
+    { id: "2", label: "Total Spent", value: "₹3400", icon: "wallet", color: "#22c55e" },
+  ];
+
+  const actions = [
+    { id: "1", title: "Book Service", icon: "hammer", color: "#3b82f6", screen: "BookService" },
+    { id: "2", title: "Booking History", icon: "time", color: "#f59e0b", screen: "BookingHistory" },
+    { id: "3", title: "Profile", icon: "user", color: "#06b6d4", screen: "CustomerProfile" },
+  ];
+
+  const activities = [
+    { id: "1", title: "Booking Confirmed", desc: "Plumber service booked", time: "10 min ago", icon: "check-circle", color: "#22c55e" },
+    { id: "2", title: "Payment Done", desc: "₹500 paid for cleaning", time: "2 hrs ago", icon: "credit-card", color: "#3b82f6" },
+    { id: "3", title: "Booking Completed", desc: "Electrician service done", time: "Yesterday", icon: "tasks", color: "#f59e0b" },
+  ];
+
   return (
     <LinearGradient colors={["#fdfcfb", "#dfe9f3"]} style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Welcome Customer 🙋</Text>
-        <Text style={styles.sub}>Logged in as: {route?.params?.user}</Text>
-
-        {/* Quick Info Section */}
-        <View style={styles.infoCard}>
-          <Text style={styles.infoLabel}>Active Bookings</Text>
-          <Text style={styles.infoValue}>2</Text>
-          <Text style={styles.infoLabel}>Total Spent</Text>
-          <Text style={styles.infoValue}>₹3400</Text>
-        </View>
-
-        {/* Bottom Actions */}
-        <View style={styles.bottomBar}>
-          <TouchableOpacity 
-            style={styles.bottomBtn} 
-            onPress={() => navigation.navigate("BookService")}
-          >
-            <Ionicons name="hammer" size={22} color="#fff" />
-            <Text style={styles.bottomBtnText}>Book</Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-            style={styles.bottomBtn} 
-            onPress={() => navigation.navigate("BookingHistory")}
-          >
-            <Ionicons name="time" size={22} color="#fff" />
-            <Text style={styles.bottomBtnText}>History</Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-            style={styles.bottomBtn} 
-            onPress={() => navigation.navigate("CustomerProfile")}
-          >
-            <Ionicons name="person" size={22} color="#fff" />
-            <Text style={styles.bottomBtnText}>Profile</Text>
-          </TouchableOpacity>
-        </View>
+      {/* ✅ Navbar */}
+      <View style={styles.navbar}>
+        <Text style={styles.brand}>
+         <FontAwesome5 name="qrcode" size={18} color="#f59e0b" /> Sathi
+        </Text>
+        <TouchableOpacity onPress={() => setMenuVisible(!menuVisible)}>
+          <Ionicons name="person-circle" size={32} color="#333" />
+        </TouchableOpacity>
       </View>
+
+      {/* ✅ Dropdown Menu */}
+      {menuVisible && (
+        <View style={styles.dropdown}>
+          <TouchableOpacity
+            style={styles.dropdownItem}
+            onPress={() => {
+              setMenuVisible(false);
+              navigation.navigate("Settings");
+            }}
+          >
+            <FontAwesome5 name="cog" size={16} />
+            <Text style={styles.dropdownText}> Settings</Text>
+          </TouchableOpacity>
+          <View style={styles.divider} />
+          <TouchableOpacity
+            style={styles.dropdownItem}
+            onPress={() => {
+              setMenuVisible(false);
+              setLogoutVisible(true);
+            }}
+          >
+            <FontAwesome5 name="sign-out-alt" size={16} />
+            <Text style={styles.dropdownText}> Logout</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
+      <FlatList
+        ListHeaderComponent={
+          <View style={styles.container}>
+            {/* Header */}
+            <Text style={styles.title}>Welcome Customer 🙋</Text>
+            <Text style={styles.sub}>Logged in as: {route?.params?.user}</Text>
+
+            {/* Stats */}
+            <View style={styles.statsGrid}>
+              {stats.map((s) => (
+                <View key={s.id} style={styles.statCard}>
+                  <View style={[styles.statIcon, { backgroundColor: s.color }]}>
+                    <FontAwesome5 name={s.icon} size={18} color="#fff" />
+                  </View>
+                  <Text style={styles.statNumber}>{s.value}</Text>
+                  <Text style={styles.statLabel}>{s.label}</Text>
+                </View>
+              ))}
+            </View>
+
+            {/* Quick Actions */}
+            <Text style={styles.sectionTitle}>Quick Actions</Text>
+            <View style={styles.actionsGrid}>
+              {actions.map((a) => (
+                <TouchableOpacity
+                  key={a.id}
+                  style={styles.actionCard}
+                  onPress={() => navigation.navigate(a.screen)}
+                >
+                  <View style={[styles.actionIcon, { backgroundColor: a.color }]}>
+                    <FontAwesome5 name={a.icon} size={18} color="#fff" />
+                  </View>
+                  <Text style={styles.actionTitle}>{a.title}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            {/* Recent Activity */}
+            <View style={styles.card}>
+              <View style={styles.cardHeader}>
+                <Text style={styles.cardTitle}>Recent Activity</Text>
+                <TouchableOpacity onPress={() => navigation.navigate("BookingHistory")}>
+                  <Text style={styles.link}>View All</Text>
+                </TouchableOpacity>
+              </View>
+              {activities.map((act) => (
+                <View key={act.id} style={styles.activityItem}>
+                  <View style={[styles.activityIcon, { backgroundColor: act.color }]}>
+                    <FontAwesome5 name={act.icon} size={16} color="#fff" />
+                  </View>
+                  <View style={{ marginLeft: 12 }}>
+                    <Text style={styles.activityTitle}>{act.title}</Text>
+                    <Text style={styles.activityDesc}>{act.desc}</Text>
+                    <Text style={styles.activityTime}>{act.time}</Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          </View>
+        }
+      />
+
+      {/* Bottom Navigation */}
+      <View style={styles.bottomNav}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate("CustomerProfile")}>
+          <Ionicons name="person" size={22} color="#666" />
+          <Text>Profile</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate("BookService")}>
+          <Ionicons name="hammer" size={22} color="#666" />
+          <Text>Book</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate("BookingHistory")}>
+          <Ionicons name="time" size={22} color="#666" />
+          <Text>History</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* ✅ Logout Modal */}
+      <Modal visible={logoutVisible} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalBox}>
+            <Text style={styles.modalText}>Are you sure you want to logout?</Text>
+            <View style={styles.modalActions}>
+              <TouchableOpacity onPress={() => setLogoutVisible(false)}>
+                <Text style={styles.cancelBtn}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setLogoutVisible(false);
+                  navigation.replace("Login"); // navigate to login screen
+                }}
+              >
+                <Text style={styles.logoutBtn}>Logout</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center" },
-  title: { fontSize: 22, fontWeight: "700", color: "#111" },
-  sub: { fontSize: 15, marginBottom: 20, color: "#555" },
-  infoCard: {
-    backgroundColor: "white",
-    padding: 24,
-    borderRadius: 20,
-    elevation: 4,
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  infoLabel: { fontSize: 16, color: "#1e3a8a" },
-  infoValue: { fontSize: 20, fontWeight: "700", marginBottom: 8, color: "#111" },
+  container: { flex: 1, paddingBottom: 60 },
 
-  bottomBar: {
+  // ✅ Navbar
+  navbar: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 15,
+    paddingVertical: 12,
+    backgroundColor: "#fff",
+    borderBottomWidth: 1,
+    borderColor: "#eee",
+  },
+  brand: { fontSize: 18, fontWeight: "bold", color: "#111" },
+
+  dropdown: {
     position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
+    right: 10,
+    top: 55,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    elevation: 4,
+    padding: 8,
+    zIndex: 10,
+  },
+  dropdownItem: { flexDirection: "row", alignItems: "center", padding: 8 },
+  dropdownText: { marginLeft: 6, fontSize: 14 },
+  divider: { height: 1, backgroundColor: "#eee", marginVertical: 4 },
+
+  // Logout Modal
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalBox: {
+    width: "80%",
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+  },
+  modalText: { fontSize: 16, marginBottom: 20, textAlign: "center" },
+  modalActions: { flexDirection: "row", justifyContent: "space-around" },
+  cancelBtn: { color: "#666", fontSize: 15 },
+  logoutBtn: { color: "#e11d48", fontSize: 15, fontWeight: "bold" },
+
+  // Stats
+  title: { fontSize: 22, fontWeight: "700", color: "#111", textAlign: "center", marginTop: 20 },
+  sub: { fontSize: 15, marginBottom: 20, color: "#555", textAlign: "center" },
+  statsGrid: { flexDirection: "row", flexWrap: "wrap", marginHorizontal: 10 },
+  statCard: {
+    width: "45%",
+    backgroundColor: "#fff",
+    margin: 8,
+    padding: 15,
+    borderRadius: 10,
+    elevation: 2,
+    alignItems: "center",
+  },
+  statIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 8,
+  },
+  statNumber: { fontSize: 18, fontWeight: "bold" },
+  statLabel: { fontSize: 12, color: "#555", textAlign: "center" },
+
+  // Actions
+  sectionTitle: { marginLeft: 15, marginTop: 10, fontSize: 14, fontWeight: "bold", color: "#666" },
+  actionsGrid: { flexDirection: "row", flexWrap: "wrap", margin: 10 },
+  actionCard: {
+    width: "45%",
+    backgroundColor: "#fff",
+    margin: 8,
+    padding: 15,
+    borderRadius: 10,
+    elevation: 2,
+    alignItems: "center",
+  },
+  actionIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 6,
+  },
+  actionTitle: { fontSize: 13, fontWeight: "500", textAlign: "center" },
+
+  // Recent Activity
+  card: { backgroundColor: "#fff", margin: 12, borderRadius: 10, elevation: 2, padding: 10 },
+  cardHeader: { flexDirection: "row", justifyContent: "space-between", marginBottom: 10 },
+  cardTitle: { fontSize: 14, fontWeight: "600" },
+  link: { fontSize: 12, color: "#3b82f6" },
+  activityItem: { flexDirection: "row", marginBottom: 12 },
+  activityIcon: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  activityTitle: { fontSize: 13, fontWeight: "600" },
+  activityDesc: { fontSize: 12, color: "#555" },
+  activityTime: { fontSize: 11, color: "#999" },
+
+  // Bottom Nav
+  bottomNav: {
     flexDirection: "row",
     justifyContent: "space-around",
-    backgroundColor: "#3b82f6",
-    paddingVertical: 12,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    backgroundColor: "#fff",
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderColor: "#eee",
   },
-  bottomBtn: { alignItems: "center" },
-  bottomBtnText: { color: "white", fontSize: 12, marginTop: 4 },
+  navItem: { alignItems: "center" },
 });
