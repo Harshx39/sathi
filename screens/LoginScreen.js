@@ -12,11 +12,13 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { useToast } from "react-native-toast-notifications";
+
 
 export default function LoginScreen({ navigation }) {
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
-
+   const toast = useToast();
   const validateMobile = (num) => /^[0-9]{10}$/.test(num);
 
   const onLogin = () => {
@@ -32,28 +34,30 @@ export default function LoginScreen({ navigation }) {
 
     if (mobile === "9999999999") {
       navigation.replace("CustomerHome", { user: mobile });
+              toast.show("Login successful!", { type: 'success' });
+
     } else if (mobile === "8888888888") {
       navigation.replace("WorkerHome", { user: mobile });
+              toast.show("Login successful!", { type: 'success' });
+
     } else {
       Alert.alert("Login Failed", "Invalid credentials");
     }
   };
 
   return (
-    <LinearGradient colors={["#f9fafb", "#e0f7fa"]} style={{ flex: 1 }}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
-      >
+    <LinearGradient colors={["#f9fafb", "#e0f7fa"]}  style={styles.container}>
+
+  <View style={styles.card}>
         {/* Brand */}
-        <View style={styles.brand}>
-           <FontAwesome5 name="handshake" size={50} color="#10b981" /> 
-          <Text style={styles.appTitle}>Sathi</Text>
-          <Text style={styles.subTitle}>Your trusted service companion</Text>
+        <View style={styles.brandSection}>
+          <FontAwesome5 name="handshake" size={50} color="#10b981" />
+          <Text style={styles.brandTitle}>Sathi</Text>
+          <Text style={styles.brandSubtitle}>Your trusted service companion</Text>
         </View>
 
         {/* Login Card */}
-        <View style={styles.card}>
+        <View style={styles.inputContainer}>
           <Text style={styles.label}>Mobile Number</Text>
           <View style={styles.phoneRow}>
             <View style={styles.countryCode}>
@@ -93,37 +97,45 @@ export default function LoginScreen({ navigation }) {
             </TouchableOpacity>
           </View>
         </View>
-      </KeyboardAvoidingView>
+   </View>
+  
     </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", padding: 24 },
-  brand: { alignItems: "center", marginBottom: 24 },
-  appTitle: {
-    fontSize: 36,
-    fontWeight: "900",
-    textAlign: "center",
-    color: "#111827",
-    letterSpacing: 1.2,
-    marginTop: 8,
-  },
-  subTitle: {
-    fontSize: 15,
-    textAlign: "center",
-    color: "#374151",
-    marginTop: 4,
+    container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
   },
   card: {
-    backgroundColor: "white",
+    width: '100%',
+    maxWidth: 380,
+    backgroundColor: 'rgba(255,255,255,0.8)',
     borderRadius: 20,
-    padding: 24,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 6,
+    padding: 25,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 8 },
+    shadowRadius: 20,
+    elevation: 8,
+  },
+  brandSection: {
+    alignItems: 'center',
+    marginBottom: 28,
+  },
+  brandTitle: {
+    fontSize: 28,
+    fontWeight: '800',
+    color: '#1e3a8a',
+  },
+  brandSubtitle: {
+    fontSize: 14,
+    color: '#555',
+    marginTop: 4,
+    letterSpacing: 0.5,
   },
   label: { fontSize: 14, fontWeight: "600", color: "#374151", marginBottom: 6 },
   phoneRow: {

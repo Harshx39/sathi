@@ -16,11 +16,13 @@ import BookingHistory from './screens/customer/BookingHistory';
 import CustomerProfile from './screens/customer/CustomerProfile';
 import SettingScreen from './screens/SettingScreen';
 import Profile from './screens/Profile';
+import { ToastProvider } from 'react-native-toast-notifications';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
+     <ToastProvider placement="bottom" duration={2000} animationType="zoom-in"  animationDuration={300}>
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={LoginScreen} />
@@ -39,5 +41,6 @@ export default function App() {
         <Stack.Screen name="Profile" component={Profile} />
       </Stack.Navigator>
     </NavigationContainer>
+    </ToastProvider>
   );
 }

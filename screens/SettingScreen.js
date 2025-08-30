@@ -13,7 +13,7 @@ import { Ionicons, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Picker } from "@react-native-picker/picker";
 
-export default function SettingScreen() {   // ✅ FIXED name
+export default function SettingScreen() {  
   const navigation = useNavigation();
 
   // All app settings state
